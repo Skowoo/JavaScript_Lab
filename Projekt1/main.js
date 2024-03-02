@@ -1,22 +1,30 @@
 const resultField = document.getElementById("result")
-const firstInput = document.getElementById("box1")
-const secondInput = document.getElementById("box2")
-const thirdInput = document.getElementById("box3")
-const fourthInput = document.getElementById("box4")
 const sumButton = document.getElementById("calc")
 
 function calculate(){
     var container = document.getElementById("inputFields")
     var inputFields = container.querySelectorAll(".inputField")
-    resultField.textContent = " Suma: " + (2) + ", Średnia: " + (2) + ", Max: " + Math.max(inputFields.value) + ", Min: " + Math.min(inputFields.value)
+    var values = []
+
+    inputFields.forEach(function(field){
+        values.push(parseInt(field.value))
+    })
+
+    var sum = 0
+
+    values.forEach(function(number){
+        sum += number
+    })
+
+    resultField.textContent = " Suma: " + sum + ", Średnia: " + (sum / values.length) + ", Max: " + Math.max(...values) + ", Min: " + Math.min(...values)
 }
 
 function addField(){
     var container = document.getElementById("inputFields")
     var newField = document.createElement("input")
-    newField.type = "text"
+    newField.type = "number"
     newField.classList = "inputField"
-    newField.onchange = calculate()
+    newField.onchange = calculate
     container.appendChild(newField)
 }
 
