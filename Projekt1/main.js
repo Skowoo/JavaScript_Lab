@@ -7,7 +7,13 @@ function calculate(){
     var values = []
 
     inputFields.forEach(function(field){
-        values.push(parseInt(field.value))
+        var parsedNumber = parseInt(field.value)
+
+        // if parsedNumber is not equal to itself (parsedNumber !== parsedNumber) it means that it's NaN XD
+        if (parsedNumber === undefined || parsedNumber === null || parsedNumber !== parsedNumber)
+            return
+
+        values.push(parsedNumber)
     })
 
     var sum = 0
@@ -16,6 +22,7 @@ function calculate(){
         sum += number
     })
 
+    // ...variableName = collection input
     resultField.textContent = " Suma: " + sum + ", Średnia: " + (sum / values.length) + ", Max: " + Math.max(...values) + ", Min: " + Math.min(...values)
 }
 
