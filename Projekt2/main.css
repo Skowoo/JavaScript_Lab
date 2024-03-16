@@ -1,0 +1,32 @@
+.slider{
+    width: 95%;
+    height: 400px;
+    background-color: antiquewhite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.box_place {
+    display: flex;
+    overflow: hidden; 
+    flex-wrap: nowrap;
+    width: 70%;
+}
+.box {
+    width: 300px;
+    height: 300px;
+    margin: 10px;
+    background-color: black;
+    display: inline-block;
+}
+.left_button{
+    width: 50px;
+    height: 300px;
+    margin: 10px;
+}
+.right_button{
+    width: 50px;
+    height: 300px;
+    margin: 10px;
+}
