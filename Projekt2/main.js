@@ -45,7 +45,7 @@ const commandRight = () =>{
 
     if (currentIndex === box.length - 1)
     {
-        speed = 50
+        speed = 100
         targetPosition = 0
         currentIndex = 0
         console.log('komenda w prawo')
@@ -53,7 +53,7 @@ const commandRight = () =>{
     }        
     else
     {
-        speed = 10
+        speed = 20
         targetPosition -= fullSize
         currentIndex++
         console.log('komenda w lewo')
@@ -69,7 +69,7 @@ const commandLeft = () =>{
 
     if (currentIndex === 0)
     {
-        speed = 50
+        speed = 100
         targetPosition = -1 * (box.length - 1) * fullSize
         currentIndex = box.length - 1        
         console.log('komenda w lewo')
@@ -77,7 +77,7 @@ const commandLeft = () =>{
     }        
     else
     {
-        speed = 10
+        speed = 20
         targetPosition += fullSize
         currentIndex--
         console.log('komenda w prawo')
@@ -96,9 +96,9 @@ const goRight = () => {
 
     if(targetPosition - position < 200)
         speed = 3
-    else if(targetPosition - position < 100)
+    if(targetPosition - position < 100)
         speed = 1
-    else if(targetPosition - position < 10)
+    if(targetPosition - position < 10)
         speed = 0.2
 
     position += speed
