@@ -17,10 +17,9 @@
 }
 .box {
     position: absolute;
-    width: 90%;
-    height: 90%;
-    left: 5%;
-    top: 5%;
+    width: 98%;
+    height: 100%;
+    left: 1%;
     background-color: black;
 }
 .button{
