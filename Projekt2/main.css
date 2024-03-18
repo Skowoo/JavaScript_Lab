@@ -2,8 +2,6 @@
     width: 95%;
     height: 400px;
     background-color: antiquewhite;
-    align-items: center;
-    justify-content: center;
     position: relative;
 }
 .box_place {
@@ -20,7 +18,24 @@
     width: 98%;
     height: 100%;
     left: 1%;
-    background-color: black;
+    background-color: gray;
+}
+.slide_buttons_place{
+    position: absolute;
+    height: 10%;
+    width: 90%;
+    bottom: 5%;
+    left: 5%;
+    text-align: center;
+    background-color: aqua;
+}
+.slide_button{
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    margin-left: 5px;
+    margin-right: 5px;
+    background-color: blue;
 }
 .button{
     width: 3%;

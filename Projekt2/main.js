@@ -3,17 +3,48 @@ const singleSlide = document.querySelector('.box')
 const boxPlace = document.querySelector('.box_place')
 const leftButton = document.querySelector('.left')
 const rightButton = document.querySelector('.right')
+const slideButtonsPlace = document.querySelector('.slide_buttons_place')
 let position = 0
 let targetPosition = 0
 let currentIndex = 0
 let fullSize = (0.1 * singleSlide.clientWidth) + singleSlide.clientWidth // Full size (with spacer between slides)
 let speed = 5
 let interval = 1
-let working = true
+let working = false
 
 
 box.forEach((slide, index) => { // set initial position
     slide.style.transform = 'translateX(' + (position + (index * fullSize)) + 'px)';
+    var newSlideButton = document.createElement('button')
+    newSlideButton.classList = "slide_button"
+    newSlideButton.id = index
+    newSlideButton.innerHTML = index
+    newSlideButton.addEventListener('click', (obj) =>{
+        if (currentIndex === obj.target.id)
+        {
+            console.log('index równy, return')
+            return
+        }
+        else if(currentIndex < obj.target.id)
+        {
+            targetPosition = -1 * fullSize * obj.target.id                     
+            currentIndex = obj.target.id
+            speed = 30
+            console.log(targetPosition)
+            console.log(currentIndex)
+            goLeft()
+        }
+        else
+        {
+            targetPosition = -1 * fullSize * obj.target.id
+            currentIndex = obj.target.id
+            speed = 30
+            console.log(targetPosition)
+            console.log(currentIndex)
+            goRight()
+        }
+    })
+    slideButtonsPlace.appendChild(newSlideButton)
 })
 
 boxPlace.addEventListener('click', () =>{
@@ -43,7 +74,7 @@ const commandRight = () =>{
     if (!working)
         return
 
-    if (currentIndex === box.length - 1)
+    if (currentIndex >= box.length - 1)
     {
         speed = 100
         targetPosition = 0
@@ -53,7 +84,7 @@ const commandRight = () =>{
     }        
     else
     {
-        speed = 20
+        speed = 30
         targetPosition -= fullSize
         currentIndex++
         console.log('komenda w lewo')
@@ -67,17 +98,17 @@ const commandLeft = () =>{
     if (!working)
         return
 
-    if (currentIndex === 0)
+    if (currentIndex <= 0)
     {
         speed = 100
         targetPosition = -1 * (box.length - 1) * fullSize
         currentIndex = box.length - 1        
         console.log('komenda w lewo')
         goLeft()
-    }        
+    }
     else
     {
-        speed = 20
+        speed = 30
         targetPosition += fullSize
         currentIndex--
         console.log('komenda w prawo')
@@ -94,8 +125,8 @@ const goRight = () => {
 
     console.log('w prawo')
 
-    if(targetPosition - position < 200)
-        speed = 3
+    if(targetPosition - position < 250)
+        speed = 10
     if(targetPosition - position < 100)
         speed = 1
     if(targetPosition - position < 10)
@@ -114,8 +145,8 @@ const goLeft = () => {
 
     console.log('w lewo')
 
-    if(position - targetPosition < 200)
-        speed = 3
+    if(position - targetPosition < 250)
+        speed = 10
     if(position - targetPosition < 100)
         speed = 1
     if(position - targetPosition < 10)
