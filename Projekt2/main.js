@@ -1,5 +1,3 @@
-const box = document.querySelectorAll('.box')
-const singleSlide = document.querySelector('.box')
 const boxPlace = document.querySelector('.box_place')
 const leftButton = document.querySelector('.left')
 const rightButton = document.querySelector('.right')
@@ -7,22 +5,35 @@ const slideButtonsPlace = document.querySelector('.slide_buttons_place')
 let position = 0
 let targetPosition = 0
 let currentIndex = 0
-let fullSize = (0.1 * singleSlide.clientWidth) + singleSlide.clientWidth // Full size (with spacer between slides)
 let speed = 5
 let interval = 1
-let working = false
+let working = true
 
+for (let i = 0; i < 6; i++){
+    var newSlide = document.createElement('div')
+    newSlide.classList = "box"
+    var newSlideContent = document.createElement('img')
+    newSlideContent.src = "https://picsum.photos/1000/300"
+    newSlideContent.style.width = '100%'
+    newSlideContent.style.height = '100%'
+    newSlide.appendChild(newSlideContent)
+    boxPlace.appendChild(newSlide)
+}
 
-box.forEach((slide, index) => { // set initial position
+const singleSlide = document.querySelector('.box')
+let fullSize = (0.1 * singleSlide.clientWidth) + singleSlide.clientWidth // Full size (with spacer between slides)
+const boxes = document.querySelectorAll('.box')
+
+boxes.forEach((slide, index) => { // set initial position
     slide.style.transform = 'translateX(' + (position + (index * fullSize)) + 'px)';
     var newSlideButton = document.createElement('button')
     newSlideButton.classList = "slide_button"
     newSlideButton.id = index
-    newSlideButton.innerHTML = index
+    //newSlideButton.innerHTML = index
     newSlideButton.addEventListener('click', (obj) =>{
+        working = false
         if (currentIndex === obj.target.id)
         {
-            console.log('index równy, return')
             return
         }
         else if(currentIndex < obj.target.id)
@@ -30,8 +41,6 @@ box.forEach((slide, index) => { // set initial position
             targetPosition = -1 * fullSize * obj.target.id                     
             currentIndex = obj.target.id
             speed = 30
-            console.log(targetPosition)
-            console.log(currentIndex)
             goLeft()
         }
         else
@@ -39,8 +48,6 @@ box.forEach((slide, index) => { // set initial position
             targetPosition = -1 * fullSize * obj.target.id
             currentIndex = obj.target.id
             speed = 30
-            console.log(targetPosition)
-            console.log(currentIndex)
             goRight()
         }
     })
@@ -48,38 +55,27 @@ box.forEach((slide, index) => { // set initial position
 })
 
 boxPlace.addEventListener('click', () =>{
-    if (working)
-    {
-        working = false
-    }        
-    else
-    {
-        working = true
-        autoMove()
-    }
-    console.log(working)
+    working = false
+    var lightBox = boxes[currentIndex]
+    console.log(lightBox)
 })
 
 rightButton.addEventListener('click', () => {
-    working = true
-    commandRight()    
+    working = false
+    commandRight()
 })
 
 leftButton.addEventListener('click', () => {
-    working = true
+    working = false
     commandLeft()
 })
 
 const commandRight = () =>{
-    if (!working)
-        return
-
-    if (currentIndex >= box.length - 1)
+    if (currentIndex >= boxes.length - 1)
     {
         speed = 100
         targetPosition = 0
         currentIndex = 0
-        console.log('komenda w prawo')
         goRight()
     }        
     else
@@ -87,23 +83,16 @@ const commandRight = () =>{
         speed = 30
         targetPosition -= fullSize
         currentIndex++
-        console.log('komenda w lewo')
         goLeft()
     }
-    console.log(targetPosition)
-    console.log(currentIndex)
 }
 
 const commandLeft = () =>{
-    if (!working)
-        return
-
     if (currentIndex <= 0)
     {
         speed = 100
-        targetPosition = -1 * (box.length - 1) * fullSize
-        currentIndex = box.length - 1        
-        console.log('komenda w lewo')
+        targetPosition = -1 * (boxes.length - 1) * fullSize
+        currentIndex = boxes.length - 1        
         goLeft()
     }
     else
@@ -111,19 +100,14 @@ const commandLeft = () =>{
         speed = 30
         targetPosition += fullSize
         currentIndex--
-        console.log('komenda w prawo')
         goRight()
     }
-    console.log(targetPosition)
-    console.log(currentIndex)
 }
 
 const goRight = () => {
-    box.forEach((slide, index) => {
+    boxes.forEach((slide, index) => {
         slide.style.transform = 'translateX(' + (position + (index * fullSize)) + 'px)';
     })
-
-    console.log('w prawo')
 
     if(targetPosition - position < 250)
         speed = 10
@@ -139,11 +123,9 @@ const goRight = () => {
 }
 
 const goLeft = () => {    
-    box.forEach((slide, index) => {
+    boxes.forEach((slide, index) => {
         slide.style.transform = 'translateX(' + (position + (index * fullSize)) + 'px)';
     })
-
-    console.log('w lewo')
 
     if(position - targetPosition < 250)
         speed = 10
@@ -158,11 +140,14 @@ const goLeft = () => {
         setTimeout(goLeft, interval)
 }
 
-const autoMove = () =>{
-    if (working){
-        commandRight()
-        setTimeout(autoMove, 5000)
-    }
+const autoMove = () => {
+    setTimeout(() => 
+    {
+        if (working) {
+            commandRight();
+        }
+        autoMove(); 
+    }, 3000);
 }
 
 autoMove()

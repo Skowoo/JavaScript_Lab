@@ -1,7 +1,6 @@
 .slider{
     width: 95%;
     height: 400px;
-    background-color: antiquewhite;
     position: relative;
 }
 .box_place {
@@ -11,36 +10,35 @@
     width: 90%;
     height: 80%;
     overflow: hidden; 
-    background-color: rgb(255, 228, 192);
 }
 .box {
     position: absolute;
     width: 98%;
     height: 100%;
     left: 1%;
-    background-color: gray;
 }
 .slide_buttons_place{
     position: absolute;
-    height: 10%;
+    height: auto;
     width: 90%;
     bottom: 5%;
     left: 5%;
     text-align: center;
-    background-color: aqua;
 }
 .slide_button{
     display: inline-block;
-    height: 40px;
-    width: 40px;
+    border-radius: 50%;
+    border: 0px;
+    height: 20px;
+    width: 20px;
     margin-left: 5px;
     margin-right: 5px;
-    background-color: blue;
 }
 .button{
     width: 3%;
     height: 80%;    
     top: 10px;
+    border: 0px;
     position: absolute;
 }
 .left{
