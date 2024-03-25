@@ -2,6 +2,7 @@ const boxPlace = document.querySelector('.box_place')
 const leftButton = document.querySelector('.left')
 const rightButton = document.querySelector('.right')
 const slideButtonsPlace = document.querySelector('.slide_buttons_place')
+const lightBox = document.querySelector('.lightbox')
 let position = 0
 let targetPosition = 0
 let currentIndex = 0
@@ -56,8 +57,20 @@ boxes.forEach((slide, index) => { // set initial position
 
 boxPlace.addEventListener('click', () =>{
     working = false
-    var lightBox = boxes[currentIndex]
-    console.log(lightBox)
+    var clickedSlide = boxes[currentIndex]
+    var lightboxContent = document.createElement('img')
+    lightboxContent.src = clickedSlide.firstChild.src
+    lightboxContent.style.width = '99%'
+    lightboxContent.style.height = '99%'
+    lightBox.appendChild(lightboxContent)
+    lightBox.showModal()
+})
+
+lightBox.addEventListener('click', () => {
+    while (lightBox.firstChild) { 
+        lightBox.removeChild(lightBox.firstChild); 
+    }
+    lightBox.close()
 })
 
 rightButton.addEventListener('click', () => {
