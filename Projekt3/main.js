@@ -89,16 +89,17 @@ const addChannel = () => {
     playButton.innerHTML = 'Odtwarzaj'
     newChannel.appendChild(playButton)
     playButton.addEventListener('click', (ev) => {
-        console.log(existingChannels[ev.target.id][3] + 100)
-        playingChannels.push([ev.target.id, setInterval(
+        let playTrack = () => {
             existingChannels[ev.target.id][4].forEach(element => {            
                 setTimeout(() => { 
                     const sound = sounds[element[1]]
                     sound.currentTime = 0
                     sound.play()
                 }, element[0])
-            }), (existingChannels[ev.target.id][3] + 100)
-        )])
+            })
+        }
+        playTrack()
+        playingChannels.push([ev.target.id, setInterval(() => { playTrack() }, (existingChannels[ev.target.id][3]))])
     })
 
     var stopPlayButton = document.createElement('button')
@@ -107,7 +108,10 @@ const addChannel = () => {
     stopPlayButton.innerHTML = 'Zatrzymaj odtwarzanie'
     newChannel.appendChild(stopPlayButton)
     stopPlayButton.addEventListener('click', (ev) => {
-        
+        let toBeStopped = playingChannels.find(x => x[0] === ev.target.id)
+        clearInterval(toBeStopped[1])
+        playingChannels.pop(toBeStopped)
+        console.log(playingChannels)
     })
 
     existingChannels.push([channelCounter, false, 0, 0, []])    
