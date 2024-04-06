@@ -10,17 +10,9 @@ const sounds = {
     'l': document.querySelector('#tom'),
 }
 
-const recordButton = document.querySelector('#record_button')
-const stopRecordButton = document.querySelector('#stop_record_button')
-const playButton = document.querySelector('#play_button')
 const metroOnButton = document.querySelector('#metro_on_button')
 const metroOffButton = document.querySelector('#metro_off_button')
 const metroInput = document.querySelector('#metro_input')
-
-let recordBeganAt = Date.now()
-let recordEndAt = Date.now()
-let isRecording = false
-let recordedSounds = []
 let metronomeInterval
 
 metroOnButton.addEventListener('click', () => {
@@ -48,6 +40,15 @@ addEventListener('keypress',(ev)=>{
     }
 })
 
+const recordButton = document.querySelector('#record_button')
+const stopRecordButton = document.querySelector('#stop_record_button')
+const playButton = document.querySelector('#play_button')
+
+let recordBeganAt = Date.now()
+let recordEndAt = Date.now()
+let isRecording = false
+let recordedSounds = []
+
 recordButton.addEventListener('click', () =>{
     recordBeganAt = Date.now()
     isRecording = true;
@@ -62,11 +63,6 @@ stopRecordButton.addEventListener('click', () =>{
 } )
 
 playButton.addEventListener('click', () =>{
-    console.log(recordedSounds)
-    play()
-} )
-
-let play = () => {
     recordedSounds.forEach(element => {
         setTimeout(() => { 
             const sound = sounds[element[1]]
@@ -74,4 +70,4 @@ let play = () => {
             sound.play()
         }, element[0])
     });
-}
+} )
