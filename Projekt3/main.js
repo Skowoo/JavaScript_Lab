@@ -65,7 +65,7 @@ const addChannel = () => {
 
     var startRecButton = document.createElement('button')
     startRecButton.id = channelCounter
-    startRecButton.classList = 'btn start'
+    startRecButton.classList = 'btn'
     startRecButton.innerHTML = 'Nagrywaj'
     newChannel.appendChild(startRecButton)
     startRecButton.addEventListener('click', (ev) => {
@@ -75,7 +75,7 @@ const addChannel = () => {
 
     var stopRecButton = document.createElement('button')
     stopRecButton.id = channelCounter
-    stopRecButton.classList = 'btn stop'
+    stopRecButton.classList = 'btn'
     stopRecButton.innerHTML = 'Zakończ nagrywanie'
     newChannel.appendChild(stopRecButton)
     stopRecButton.addEventListener('click', (ev) => {
@@ -85,7 +85,7 @@ const addChannel = () => {
 
     var playButton = document.createElement('button')
     playButton.id = channelCounter
-    playButton.classList = 'btn play'
+    playButton.classList = 'btn'
     playButton.innerHTML = 'Odtwarzaj'
     newChannel.appendChild(playButton)
     playButton.addEventListener('click', (ev) => {
@@ -104,20 +104,59 @@ const addChannel = () => {
 
     var stopPlayButton = document.createElement('button')
     stopPlayButton.id = channelCounter
-    stopPlayButton.classList = 'btn stop_play'
+    stopPlayButton.classList = 'btn'
     stopPlayButton.innerHTML = 'Zatrzymaj odtwarzanie'
     newChannel.appendChild(stopPlayButton)
     stopPlayButton.addEventListener('click', (ev) => {
         let toBeStopped = playingChannels.find(x => x[0] === ev.target.id)
-        clearInterval(toBeStopped[1])
-        playingChannels.pop(toBeStopped)
-        console.log(playingChannels)
+        if (toBeStopped !== undefined){
+            clearInterval(toBeStopped[1])
+            playingChannels.pop(toBeStopped)
+        }
+    })
+
+    var clearPlayButton = document.createElement('button')
+    clearPlayButton.id = channelCounter
+    clearPlayButton.classList = 'btn'
+    clearPlayButton.innerHTML = 'Wyczyść nagranie'
+    newChannel.appendChild(clearPlayButton)
+    clearPlayButton.addEventListener('click', (ev) => {
+        let toBeStopped = playingChannels.find(x => x[0] === ev.target.id)
+        if (toBeStopped !== undefined){
+            clearInterval(toBeStopped[1])
+            playingChannels.pop(toBeStopped)
+        }
+        existingChannels[ev.target.id][2] = 0
+        existingChannels[ev.target.id][3] = 0
+        existingChannels[ev.target.id][4] = []
+    })
+
+    var deleteChannelButton = document.createElement('button')
+    deleteChannelButton.id = channelCounter
+    deleteChannelButton.classList = 'btn'
+    deleteChannelButton.innerHTML = 'Usuń kanał'
+    newChannel.appendChild(deleteChannelButton)
+    deleteChannelButton.addEventListener('click', (ev) => {
+        let toBeStopped = playingChannels.find(x => x[0] === ev.target.id)
+        if (toBeStopped !== undefined){
+            clearInterval(toBeStopped[1])
+            playingChannels.pop(toBeStopped)
+        }
+        let toBeDeleted = existingChannels.find(x => x[0] === ev.target.id)
+        if (toBeDeleted !== undefined){
+            existingChannels.pop(toBeDeleted)
+        }        
+        let buttonsToBeDeleted = channelsBox.querySelector('#channel_' + ev.target.id)
+        if (buttonsToBeDeleted !== undefined)
+        {
+            channelsBox.removeChild(buttonsToBeDeleted)
+        }        
     })
 
     existingChannels.push([channelCounter, false, 0, 0, []])    
 
+    newChannel.id = 'channel_' + channelCounter
     channelsBox.appendChild(newChannel)
-    channelsBox.appendChild(document.createElement('br'))
 
     channelCounter++
 }
