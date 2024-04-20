@@ -39,12 +39,16 @@ function DisplayNote(title, content, isPinned, createdAt, deadline, color, tags)
 
 deleteButton.addEventListener('click', () => {
     localStorage.clear();
+    while(notesContainer.childElementCount > 0)
+        notesContainer.removeChild(notesContainer.firstChild)
 })
 
 addButton.addEventListener('click', () => {
     const titleField = document.querySelector('#title_field')
     const textField = document.querySelector('#text_field')
+    const tagsField = document.querySelector('#tags_field')
     const checkBox = document.querySelector('#pinned_field')
+    const colorList = document.querySelector('#color_select')
 
-    DisplayNote(titleField.value, textField.value, checkBox.checked, Date.now(), Date.now())
+    DisplayNote(titleField.value, textField.value, checkBox.checked, Date.now(), Date.now(), colorList.value, tagsField.value.split(' '))
 })
