@@ -2,6 +2,41 @@ const addButton = document.querySelector('#create_button')
 const deleteButton = document.querySelector('#delete_button')
 const notesContainer = document.querySelector('#notes_container')
 
+function DisplayNote(title, content, isPinned, createdAt, deadline, color, tags) 
+{
+    let newNote = document.createElement('div')
+    newNote.classList = 'note'
+    newNote.style.backgroundColor = color
+
+    let newCheckBox = document.createElement('input')
+    newCheckBox.classList = 'note_checkbox'
+    newCheckBox.type = 'checkbox'
+    newCheckBox.checked = isPinned
+    newNote.appendChild(newCheckBox)
+
+    let titleBlock = document.createElement('div')
+    titleBlock.classList = 'title_block'
+    titleBlock.innerHTML = title
+    newNote.appendChild(titleBlock)
+
+    let textBlock = document.createElement('div')
+    textBlock.classList = 'text_block'
+    textBlock.innerHTML = content
+    newNote.appendChild(textBlock)
+
+    let dateBlock = document.createElement('div')
+    dateBlock.classList = 'date_block'
+    dateBlock.innerHTML = 'Dodano: ' + new Date(createdAt).toLocaleString()
+    newNote.appendChild(dateBlock)
+
+    let DeadlineBlock = document.createElement('div')
+    DeadlineBlock.classList = 'deadline_block'
+    DeadlineBlock.innerHTML = 'Termin: ' + new Date(deadline).toLocaleString()
+    newNote.appendChild(DeadlineBlock)
+
+    notesContainer.appendChild(newNote)
+}
+
 deleteButton.addEventListener('click', () => {
     localStorage.clear();
 })
@@ -11,22 +46,5 @@ addButton.addEventListener('click', () => {
     const textField = document.querySelector('#text_field')
     const checkBox = document.querySelector('#pinned_field')
 
-    let newNote = document.createElement('div')
-    newNote.classList = 'note'
-
-    let titleBlock = document.createElement('div')
-    titleBlock.classList = 'title_block'
-    titleBlock.innerHTML = titleField.value
-    newNote.appendChild(titleBlock)
-
-    let textBlock = document.createElement('div')
-    textBlock.classList = 'text_block'
-    textBlock.innerHTML = textField.value
-    newNote.appendChild(textBlock)
-
-    let newCheckBox = document.createElement('checkbox')
-    newCheckBox.checked = checkBox.checked
-    newNote.appendChild(newCheckBox)
-
-    notesContainer.appendChild(newNote)
+    DisplayNote(titleField.value, textField.value, checkBox.checked, Date.now(), Date.now())
 })

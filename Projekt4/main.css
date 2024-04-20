@@ -1,19 +1,35 @@
 .note{
-    background-color: aqua;
     display: inline-block;
-    width: 10%;
-    height: 100px;
+    width: 200px;
+    height: 300px;
     margin: 10px;
 }
 
 .title_block{
-    background-color: azure;
+    background-color: rgba(0, 0, 0, 0.1);
+    height: 40px;
     text-align: center;
-    word-wrap: break-word;
+    word-wrap: break-word; 
+    overflow: hidden;
 }
 
-.text_block{
-    background-color: bisque;
-    word-wrap: break-word;
+.text_block{    
+    height: 220px;
     text-align: center;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
+.note_checkbox{
+    position: fixed;
+}
+
+.date_block{
+    background-color: rgba(0, 0, 0, 0.05);
+    height: 20px;
+}
+
+.deadline_block{
+    background-color: rgba(0, 0, 0, 0.05);
+    height: 20px;
 }
