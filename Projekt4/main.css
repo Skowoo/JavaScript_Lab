@@ -1,0 +1,19 @@
+.note{
+    background-color: aqua;
+    display: inline-block;
+    width: 10%;
+    height: 100px;
+    margin: 10px;
+}
+
+.title_block{
+    background-color: azure;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.text_block{
+    background-color: bisque;
+    word-wrap: break-word;
+    text-align: center;
+}
