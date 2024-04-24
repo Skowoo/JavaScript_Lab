@@ -21,7 +21,7 @@
 }
 
 .note_checkbox{
-    position: fixed;
+    float: left;
 }
 
 .date_block{
