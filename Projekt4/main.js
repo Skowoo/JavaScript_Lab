@@ -46,6 +46,19 @@ function CreateNote(createdAt, title, content, isPinned, deadline, color, tags)
         localStorage.setItem(key, JSON.stringify(notesList))
     })
 
+    let deleteButton = document.createElement('button')
+    deleteButton.innerHTML = 'X'
+    deleteButton.classList = 'note_delete_button'
+    deleteButton.id = createdAt
+    titleBlock.appendChild(deleteButton)
+
+    deleteButton.addEventListener('click', (ev) => {
+        let toBeDeleted = notesList.find((e) => e[0] == createdAt)
+        notesList.pop(toBeDeleted)
+        localStorage.setItem(key, JSON.stringify(notesList))
+        notesContainer.removeChild(newNote)
+    })
+
     let textBlock = document.createElement('div')
     textBlock.classList = 'text_block'
     textBlock.innerHTML = content

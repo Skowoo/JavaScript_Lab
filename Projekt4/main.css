@@ -20,6 +20,18 @@
     overflow: hidden;
 }
 
+.note_delete_button{
+    float: right;
+    height: 13px;
+    width: 13px;
+    margin: 3px;
+    padding: 0px;
+    border: 2px;
+    text-align: center;
+    font-weight: bold;
+    background-color: aliceblue;
+}
+
 .note_checkbox{
     float: left;
 }
