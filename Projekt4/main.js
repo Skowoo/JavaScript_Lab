@@ -3,9 +3,18 @@ const deleteButton = document.querySelector('#delete_button')
 const notesContainer = document.querySelector('#notes_container')
 const findButton = document.querySelector('#find_button')
 
-const notesList = []
+const key = 'notesListStorageKey'
 
-function DisplayNote(createdAt, title, content, isPinned, deadline, color, tags) 
+let notesList = []
+let storedList = JSON.parse(localStorage.getItem(key))
+if (storedList !== null)
+{
+    notesList = [...storedList]
+    DisplayAllNotes(notesList)
+}
+
+
+function CreateNote(createdAt, title, content, isPinned, deadline, color, tags) 
 {
     let newNote = document.createElement('div')
     newNote.classList = 'note'
@@ -34,6 +43,7 @@ function DisplayNote(createdAt, title, content, isPinned, deadline, color, tags)
         }
         let noteToUpdate = notesList.find((e) => e[0] == ev.target.id)        
         noteToUpdate[3] = ev.target.checked
+        localStorage.setItem(key, JSON.stringify(notesList))
     })
 
     let textBlock = document.createElement('div')
@@ -52,12 +62,25 @@ function DisplayNote(createdAt, title, content, isPinned, deadline, color, tags)
     newNote.appendChild(DeadlineBlock)
 
     notesContainer.appendChild(newNote)
-    notesList.push([createdAt, title, content, isPinned, deadline, color, tags])
+    if (!notesList.some((a) => a[0] == createdAt))
+    {
+        notesList.push([createdAt, title, content, isPinned, deadline, color, tags])
+        localStorage.setItem(key, JSON.stringify(notesList))
+    }        
+}
+
+function DisplayAllNotes(list){
+    while(notesContainer.childElementCount > 0)
+        notesContainer.removeChild(notesContainer.firstChild)
+
+    list.sort((a, b) => a[0] - b[0]) // Sorty by time
+    list.sort((a, b) => b[3] - a[3]) // Sort by pinned
+    list.forEach((e) => CreateNote(e[0], e[1], e[2], e[3], e[4], e[5], e[6]));
 }
 
 deleteButton.addEventListener('click', () => {
     localStorage.clear();
-    notesList.clear();
+    notesList.splice(0, notesList.length)
     while(notesContainer.childElementCount > 0)
         notesContainer.removeChild(notesContainer.firstChild)
 })
@@ -69,16 +92,13 @@ addButton.addEventListener('click', () => {
     const checkBox = document.querySelector('#pinned_field')
     const colorList = document.querySelector('#color_select')
 
-    DisplayNote(Date.now(), titleField.value, textField.value, checkBox.checked, Date.now(), colorList.value, tagsField.value.split(' '))
+    CreateNote(Date.now(), titleField.value, textField.value, checkBox.checked, Date.now(), colorList.value, tagsField.value.split(' '))
 })
 
 findButton.addEventListener('click', () => {
     let searchBox = document.querySelector('#find_field')
     let searchString = searchBox.value
-    let findNotes = notesList.filter((e) => e[1].includes(searchString) || e[2].includes(searchString) || e[6].some((e) => e.includes(searchString)))
+    let foundNotes = notesList.filter((e) => e[1].includes(searchString) || e[2].includes(searchString) || e[6].some((e) => e.includes(searchString)))
     
-    while(notesContainer.childElementCount > 0)
-        notesContainer.removeChild(notesContainer.firstChild)
-
-    findNotes.forEach((e) => DisplayNote(e[0], e[1], e[2], e[3], e[4], e[5], e[6]));
+    DisplayAllNotes(foundNotes)
 })
