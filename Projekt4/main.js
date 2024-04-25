@@ -21,11 +21,7 @@ let notificationsInterval = setInterval(() => {
 
 function ShowNotifications() {
     notesList.forEach(e => {
-        console.log(e[4])
-        console.log(Date.now())
-        const dateFromTimestamp = new Date(Date.now());
-        const timestampLocalDatetimeString = dateFromTimestamp.toISOString().slice(0, 16);
-        if (e[4] < timestampLocalDatetimeString) {
+        if (e[4] !== '' && e[4] < new Date(Date.now()).toISOString().slice(0, 16)) {
             new Notification(e[1], { body: e[2] }); 
         }
     });
