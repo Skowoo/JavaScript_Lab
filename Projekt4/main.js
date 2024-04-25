@@ -2,6 +2,7 @@ const addButton = document.querySelector('#create_button')
 const deleteButton = document.querySelector('#delete_button')
 const notesContainer = document.querySelector('#notes_container')
 const findButton = document.querySelector('#find_button')
+const deadlineCallendar = document.querySelector('#deadline_field')
 
 const key = 'notesListStorageKey'
 
@@ -13,6 +14,22 @@ if (storedList !== null)
     DisplayAllNotes(notesList)
 }
 
+ShowNotifications()
+let notificationsInterval = setInterval(() => {
+    ShowNotifications()
+}, 60000);
+
+function ShowNotifications() {
+    notesList.forEach(e => {
+        console.log(e[4])
+        console.log(Date.now())
+        const dateFromTimestamp = new Date(Date.now());
+        const timestampLocalDatetimeString = dateFromTimestamp.toISOString().slice(0, 16);
+        if (e[4] < timestampLocalDatetimeString) {
+            new Notification(e[1], { body: e[2] }); 
+        }
+    });
+}
 
 function CreateNote(createdAt, title, content, isPinned, deadline, color, tags) 
 {
@@ -52,8 +69,8 @@ function CreateNote(createdAt, title, content, isPinned, deadline, color, tags)
     deleteButton.id = createdAt
     titleBlock.appendChild(deleteButton)
 
-    deleteButton.addEventListener('click', (ev) => {
-        let toBeDeleted = notesList.find((e) => e[0] == createdAt)
+    deleteButton.addEventListener('click', () => {
+        let toBeDeleted = notesList.find((e) => e[0] == newNote.createdAt)
         notesList.pop(toBeDeleted)
         localStorage.setItem(key, JSON.stringify(notesList))
         notesContainer.removeChild(newNote)
@@ -105,7 +122,7 @@ addButton.addEventListener('click', () => {
     const checkBox = document.querySelector('#pinned_field')
     const colorList = document.querySelector('#color_select')
 
-    CreateNote(Date.now(), titleField.value, textField.value, checkBox.checked, Date.now(), colorList.value, tagsField.value.split(' '))
+    CreateNote(Date.now(), titleField.value, textField.value, checkBox.checked, deadlineCallendar.value, colorList.value, tagsField.value.split(' '))
 })
 
 findButton.addEventListener('click', () => {
