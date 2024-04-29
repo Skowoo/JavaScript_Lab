@@ -65,9 +65,10 @@ function CreateNote(createdAt, title, content, isPinned, deadline, color, tags)
     deleteButton.id = createdAt
     titleBlock.appendChild(deleteButton)
 
-    deleteButton.addEventListener('click', () => {
-        let toBeDeleted = notesList.find((e) => e[0] == newNote.createdAt)
-        notesList.pop(toBeDeleted)
+    deleteButton.addEventListener('click', (ev) => {
+        let toBeDeleted = notesList.find((e) => e[0] == ev.target.id)
+        let index = notesList.indexOf(toBeDeleted)
+        notesList.splice(index, 1)
         localStorage.setItem(key, JSON.stringify(notesList))
         notesContainer.removeChild(newNote)
     })
