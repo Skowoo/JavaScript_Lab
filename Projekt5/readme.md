@@ -20,10 +20,10 @@ const asyncAdd = async (a,b) => {
 ### Zadanie
 1. Napisz funkcję który dodaje dwie liczby asynchronicznie. Operacja dodawania powinna zająć ~100ms.  
 W programie możesz dodawać jedynie za pomocą asyncAdd(), nie wolno użyć "+"!
-1. Napisz funkcję która pobiera dowolną ilość argumentów (liczby całkowite) i następnie korzysta z asyncAdd() by je dodać.
-1. Napisz funkcję mierzącą czas wykonania kodu.
-1. Zmierz działanie funkcji dodającej dla zbiorów danych o wielkości 100 elementów. Wyświetl czas wykonania oraz ilość operacji asynchronicznych.
-1. Zoptymalizuj działanie swojej funkcji pod kątem czasu wykonania.
+2. Napisz funkcję która pobiera dowolną ilość argumentów (liczby całkowite) i następnie korzysta z asyncAdd() by je dodać.
+3. Napisz funkcję mierzącą czas wykonania kodu.
+4. Zmierz działanie funkcji dodającej dla zbiorów danych o wielkości 100 elementów. Wyświetl czas wykonania oraz ilość operacji asynchronicznych.
+5. Zoptymalizuj działanie swojej funkcji pod kątem czasu wykonania.
  
 ### Przydamisię
 Mierzenie czasu wykonywania skryptu: performance.now() lub performance.mark(name) + performance.measure(name, startMark, endMark)
