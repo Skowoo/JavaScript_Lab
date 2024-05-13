@@ -5,7 +5,7 @@ const asyncAdd = async (a,b) => {
     return new Promise((resolve, reject) => {
       setTimeout(() =>{
         resolve(a+b)
-      }, 100)
+      }, 10)
     })
   }
 
@@ -39,9 +39,13 @@ async function benchmark(fnc, ...args)
   return result;
 }
 
-// Test execution
+//4. Bigger example
+let arr = []
+for (let i = 0; i < 100; i++){
+  arr.push(i);
+}
 async function execute() {
-  let result = await benchmark(multiNumberAdder, 1,2,3,4,5,6,7,8,9);
+  let result = await benchmark(multiNumberAdder, ...arr);
   console.log(result);
 }
 
