@@ -1,0 +1,43 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: #f0f0f0;
+}
+
+#game-container {
+    position: relative;
+    width: 80vw;
+    height: 80vh;
+    background: #fff;
+    border: 1px solid #ccc;
+    overflow: hidden;
+}
+
+#ball, #hole {
+    position: absolute;
+    border-radius: 50%;
+}
+
+#ball {
+    width: 20px;
+    height: 20px;
+    background: red;
+}
+
+#hole {
+    width: 30px;
+    height: 30px;
+    background: black;
+}
+
+#info {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#timer {
+    margin-top: 10px;
+}
