@@ -1,31 +1,38 @@
-let ball, hole, gameContainer, timerElement, startButton;
 let ballPosition = { x: 0, y: 0 };
 let holePosition = { x: 0, y: 0 };
 let animationFrameId;
 let startTime;
 let gameActive = false;
 let currentOrientation = { alpha: 0, beta: 0, gamma: 0 };
+let holesCounter = 0;
+let hole = []
+const ball = document.getElementById('ball');
+const gameContainer = document.getElementById('game-container');
+const timerElement = document.getElementById('timer');
+const startButton = document.getElementById('start-button');
 
-document.addEventListener('DOMContentLoaded', () => {
-    ball = document.getElementById('ball');
-    hole = document.getElementById('hole');
-    gameContainer = document.getElementById('game-container');
-    timerElement = document.getElementById('timer');
-    startButton = document.getElementById('start-button');
-    
-    startButton.addEventListener('click', startGame);
-
-    window.addEventListener('deviceorientation', handleOrientation);
-});
+startButton.addEventListener('click', startGame);
+window.addEventListener('deviceorientation', handleOrientation);
 
 function startGame() {
     gameActive = true;
     startTime = performance.now();
-    ballPosition = getRandomPosition(ball);
-    holePosition = getRandomPosition(hole);
 
-    setPosition(ball, ballPosition);
-    setPosition(hole, holePosition);
+    holesCounter++
+
+    hole = []
+    for (let e = 1; e <= holesCounter; e++)
+    {
+        var newHole = document.createElement('div')
+        newHole.innerHTML = e
+        newHole.id = "hole"
+        gameContainer.appendChild(newHole);
+        hole.push(newHole)
+    }
+
+    hole.forEach((hole) => {
+        setPosition(hole, getRandomPosition(hole));
+    })    
 
     timerElement.textContent = 'Time: 0.00s';
     startButton.disabled = true;
@@ -46,27 +53,19 @@ function setPosition(element, position) {
 }
 
 function handleOrientation(event) {
-    if (!gameActive) return;
-
     currentOrientation.beta = event.beta;
     currentOrientation.gamma = event.gamma;
-
-    console.log(event);
 }
 
 function update() {
-    if (!gameActive) return;
+    const speed = 0.3;
 
-    const speed = 0.1;
-
-    // Zmiana pozycji kulki w oparciu o wartości beta i gamma
     ballPosition.x += currentOrientation.gamma * speed;
     ballPosition.y += currentOrientation.beta * speed;
 
     const containerRect = gameContainer.getBoundingClientRect();
     const ballRect = ball.getBoundingClientRect();
 
-    // Upewnij się, że kulka nie wychodzi poza obszar gry
     ballPosition.x = Math.max(0, Math.min(containerRect.width - ballRect.width, ballPosition.x));
     ballPosition.y = Math.max(0, Math.min(containerRect.height - ballRect.height, ballPosition.y));
 
@@ -75,7 +74,7 @@ function update() {
     const currentTime = (performance.now() - startTime) / 1000;
     timerElement.textContent = `Time: ${currentTime.toFixed(2)}s`;
 
-    if (checkCollision(ball, hole)) {
+    if (ballInHole(ball, hole[0])) {
         gameActive = false;
         startButton.disabled = false;
         alert(`Zwycięstwo! Czas: ${currentTime.toFixed(2)}s`);
@@ -85,7 +84,7 @@ function update() {
     animationFrameId = requestAnimationFrame(update);
 }
 
-function checkCollision(ball, hole) {
+function ballInHole(ball, hole) {
     const ballRect = ball.getBoundingClientRect();
     const holeRect = hole.getBoundingClientRect();
 
