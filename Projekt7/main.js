@@ -6,6 +6,8 @@ const numBallsInput = document.getElementById('numBalls');
 const distanceInput = document.getElementById('distance');
 const speedInput = document.getElementById('speed');
 const ballSizeInput = document.getElementById('ballSize');
+const linesSizeInput = document.getElementById('lineSize');
+const discoCheck = document.getElementById('disco')
 
 let colors = ['blue', 'red', 'orange', 'green', 'black', 'aqua', 'yellow', 'pink', 'cyan', 'brown']
 let balls = [];
@@ -46,17 +48,28 @@ function start() {
     const distance = parseInt(distanceInput.value);
     const speed = parseInt(speedInput.value)
     const radius = parseInt(ballSizeInput.value);
+    const lineThickness = parseFloat(linesSizeInput.value);
+    const discoMode = discoCheck.checked;
 
     balls = [];
     for (let i = 0; i < numBalls; i++) {
         let x = Math.random() * (canvas.width - 2 * radius) + radius;
         let y = Math.random() * (canvas.height - 2 * radius) + radius;
-        let color = colors[Math.floor(Math.random() * colors.length)]
+        let color;
+        if (discoMode)
+            color = colors[Math.floor(Math.random() * colors.length)]
+        else
+            color = 'black'
+
         balls.push(new Ball(x, y, speed, radius, color));
     }
 
     function drawLines() {
-        ctx.strokeStyle = 'rgba(0,0,0,0.1)';
+        if (discoMode)
+            ctx.strokeStyle = 'rgba('+ (Math.random() * 255) + ',' + (Math.random() * 255) + ',' + (Math.random() * 255) + ',' + lineThickness + ')';
+        else
+            ctx.strokeStyle = 'rgba(0,0,0,' + lineThickness + ')';
+
         for (let i = 0; i < balls.length; i++) {
             for (let j = i + 1; j < balls.length; j++) {
                 let dx = balls[i].x - balls[j].x;
