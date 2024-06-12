@@ -90,7 +90,11 @@ function start() {
     const discoMode = discoCheck.checked;
     gravityForce = parseInt(gravityForceInput.value)
 
+    ctx.canvas.width  = 0.95 * window.innerWidth;
+    ctx.canvas.height = 0.9 * window.innerHeight;
+
     balls = [];
+    
     for (let i = 0; i < numBalls; i++) {
         let x = Math.random() * (canvas.width - 2 * radius) + radius;
         let y = Math.random() * (canvas.height - 2 * radius) + radius;
