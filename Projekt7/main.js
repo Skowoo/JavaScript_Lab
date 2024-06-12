@@ -8,9 +8,34 @@ const speedInput = document.getElementById('speed');
 const ballSizeInput = document.getElementById('ballSize');
 const linesSizeInput = document.getElementById('lineSize');
 const discoCheck = document.getElementById('disco')
-
+const gravityForceInput = document.getElementById('gravity')
+let gravityForce;
+let mouseOnCanvas = false
+let mousePosX;
+let mousePosY;
 let balls = [];
 let animation;
+
+function reset() {
+    cancelAnimationFrame(animation);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    balls = [];
+}
+startButton.addEventListener('click', () => {
+    reset();
+    start();
+});
+resetButton.addEventListener('click', reset);
+canvas.addEventListener('mouseenter', () => mouseOnCanvas = true)
+canvas.addEventListener('mouseleave', () => mouseOnCanvas = false)
+canvas.addEventListener('mousemove', trackMouse)
+canvas.addEventListener('click', () => mouseOnCanvas = !mouseOnCanvas)
+
+function trackMouse(e) {
+    mousePosX = e.clientX - canvas.offsetLeft
+    mousePosY = e.clientY - canvas.offsetTop
+}
+
 
 class Ball {
     constructor(x, y, speed, radius, colorArray) {
@@ -23,6 +48,7 @@ class Ball {
     }
 
     move() {
+        if (!mouseOnCanvas){
         this.x += this.vx;
         this.y += this.vy;
         if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) {
@@ -30,6 +56,16 @@ class Ball {
         }
         if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) {
             this.vy = -this.vy;
+        }}
+        if(mouseOnCanvas)
+        {
+            let distanceX = mousePosX - this.x
+            let velX = Math.abs(distanceX) / gravityForce
+            this.x = distanceX > 0 ? this.x + velX : this.x - velX
+
+            let distanceY = mousePosY - this.y
+            let velY = Math.abs(distanceY) / gravityForce
+            this.y = distanceY > 0 ? this.y + velY : this.y - velY
         }
     }
 
@@ -49,6 +85,7 @@ function start() {
     const radius = parseInt(ballSizeInput.value);
     const lineThickness = parseFloat(linesSizeInput.value);
     const discoMode = discoCheck.checked;
+    gravityForce = parseInt(gravityForceInput.value)
 
     balls = [];
     for (let i = 0; i < numBalls; i++) {
@@ -98,16 +135,3 @@ function start() {
     }
     animate();
 }
-
-function reset() {
-    cancelAnimationFrame(animation);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    balls = [];
-}
-
-startButton.addEventListener('click', () => {
-    reset();
-    start();
-});
-
-resetButton.addEventListener('click', reset);
