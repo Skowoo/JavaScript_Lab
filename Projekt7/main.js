@@ -9,18 +9,17 @@ const ballSizeInput = document.getElementById('ballSize');
 const linesSizeInput = document.getElementById('lineSize');
 const discoCheck = document.getElementById('disco')
 
-let colors = ['blue', 'red', 'orange', 'green', 'black', 'aqua', 'yellow', 'pink', 'cyan', 'brown']
 let balls = [];
 let animation;
 
 class Ball {
-    constructor(x, y, speed, radius, color) {
+    constructor(x, y, speed, radius, colorArray) {
         this.x = x;
         this.y = y;
         this.vx = speed * (Math.random() - 0.5);
         this.vy = speed * (Math.random() - 0.5);
         this.radius = radius;
-        this.color = color;
+        this.colorArray = colorArray;
     }
 
     move() {
@@ -37,7 +36,7 @@ class Ball {
     draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
+        ctx.fillStyle = 'rgba('+ (this.colorArray[0]) + ',' + (this.colorArray[1]) + ',' + (this.colorArray[2]) + ',1)';
         ctx.fill();
         ctx.closePath();
     }
@@ -57,25 +56,28 @@ function start() {
         let y = Math.random() * (canvas.height - 2 * radius) + radius;
         let color;
         if (discoMode)
-            color = colors[Math.floor(Math.random() * colors.length)]
+            color = [(Math.random() * 255), (Math.random() * 255), (Math.random() * 255),]
         else
-            color = 'black'
+            color = [0,0,0]
 
         balls.push(new Ball(x, y, speed, radius, color));
     }
 
     function drawLines() {
-        if (discoMode)
-            ctx.strokeStyle = 'rgba('+ (Math.random() * 255) + ',' + (Math.random() * 255) + ',' + (Math.random() * 255) + ',' + lineThickness + ')';
-        else
-            ctx.strokeStyle = 'rgba(0,0,0,' + lineThickness + ')';
-
         for (let i = 0; i < balls.length; i++) {
             for (let j = i + 1; j < balls.length; j++) {
                 let dx = balls[i].x - balls[j].x;
                 let dy = balls[i].y - balls[j].y;
                 let dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < distance) {
+                    if (discoMode)
+                        ctx.strokeStyle = 'rgba('+ 
+                            ((balls[i].colorArray[0] + balls[j].colorArray[0]) / 2) + ',' + 
+                            ((balls[i].colorArray[1] + balls[j].colorArray[1]) / 2) + ',' + 
+                            ((balls[i].colorArray[2] + balls[j].colorArray[2]) / 2) + ',' + lineThickness +')';
+                    else
+                        ctx.strokeStyle = 'rgba(0,0,0,' + lineThickness + ')';
+
                     ctx.beginPath();
                     ctx.moveTo(balls[i].x, balls[i].y);
                     ctx.lineTo(balls[j].x, balls[j].y);
@@ -87,14 +89,13 @@ function start() {
 
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawLines();
         for (const ball of balls) {
             ball.move();
             ball.draw();
-        }
-        drawLines();
+        }        
         animation = requestAnimationFrame(animate);
     }
-
     animate();
 }
 
