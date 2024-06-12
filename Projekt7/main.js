@@ -48,17 +48,7 @@ class Ball {
     }
 
     move() {
-        if (!mouseOnCanvas){
-        this.x += this.vx;
-        this.y += this.vy;
-        if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) {
-            this.vx = -this.vx;
-        }
-        if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) {
-            this.vy = -this.vy;
-        }}
-        if(mouseOnCanvas)
-        {
+        if(mouseOnCanvas) {
             let distanceX = mousePosX - this.x
             let velX = Math.abs(distanceX) / gravityForce
             this.x = distanceX > 0 ? this.x + velX : this.x - velX
@@ -66,6 +56,19 @@ class Ball {
             let distanceY = mousePosY - this.y
             let velY = Math.abs(distanceY) / gravityForce
             this.y = distanceY > 0 ? this.y + velY : this.y - velY
+        }
+        else {
+            this.x += this.vx;
+            this.y += this.vy;
+            
+            if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) {
+                this.vx = -this.vx;
+            }
+    
+            if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) {
+                this.vy = -this.vy;
+            }
+    
         }
     }
 
