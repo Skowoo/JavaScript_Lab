@@ -34,14 +34,11 @@ class Ball {
             let dx = this.x - foodBalls[i].x;
             let dy = this.y - foodBalls[i].y;
             let dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < (50 +(this.mass / Math.PI)) && foodBalls[i].mass > 0) {
-                ctx.strokeStyle = 'rgba(0,0,0,1)';
-                ctx.beginPath();
-                ctx.moveTo(this.x, this.y);
-                ctx.lineTo(foodBalls[i].x, foodBalls[i].y);
-                ctx.stroke();
-                foodBalls[i].mass--
-                this.mass += (1 / dist)
+            if (dist < (50 +(this.mass / Math.PI))) {
+                if (this.mass <= foodBalls[i].mass)
+                    flow(this, foodBalls[i], dist)
+                else
+                    flow(foodBalls[i], this, dist)
             }
         }
     }
@@ -55,6 +52,23 @@ class Ball {
     }
 }
 
+function flow(smaller, bigger, dist){
+    ctx.strokeStyle = 'rgba('+ 
+    bigger.colorArray[0] + ',' + 
+    bigger.colorArray[1] + ',' + 
+    bigger.colorArray[2] + ',' + 
+    smaller.mass / 30 +')';
+    ctx.beginPath();
+    ctx.moveTo(bigger.x, bigger.y);
+    ctx.lineTo(smaller.x, smaller.y);
+    ctx.stroke();
+    smaller.mass--
+    bigger.mass += (1 / dist)
+    if (smaller.mass < 1){
+        replaceBall(smaller)
+    }
+}
+
 function start() {
     ctx.canvas.width  = 0.98 * window.innerWidth;
     ctx.canvas.height = 0.97 * window.innerHeight;
@@ -62,7 +76,7 @@ function start() {
     mousePosX = canvas.width / 2
     mousePosY = canvas.height / 2
     player = new Ball(mousePosX, mousePosY, 1, 25, [(Math.random() * 255), (Math.random() * 255), (Math.random() * 255),])
-    addFood((canvas.width + canvas.height) / 5)
+    addFood((canvas.width + canvas.height) / 10)
 
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -83,11 +97,15 @@ function addFood(quantity){
     for (let i = 0; i < quantity; i++) {
         let x = Math.random() * (canvas.width - 2 * 5) + 5;
         let y = Math.random() * (canvas.height - 2 * 5) + 5;
-        let color;
-        color = [(Math.random() * 255), (Math.random() * 255), (Math.random() * 255),]
-
-        foodBalls.push(new Ball(x, y, 0, (Math.random() * 50), color));
+        let color = [(Math.random() * 255), (Math.random() * 255), (Math.random() * 255),]
+        foodBalls.push(new Ball(x, y, 0, (Math.random() * (player.mass)), color));
     }
+}
+
+function replaceBall(ball){
+    ball.x = Math.random() * (canvas.width - 2 * 5) + 5;
+    ball.y = Math.random() * (canvas.height - 2 * 5) + 5;
+    ball.mass = (Math.random() * (player.mass * 1.2))
 }
 
 start()
