@@ -15,24 +15,40 @@ function trackMouse(e) {
 }
 
 class Ball {
-    constructor(x, y, speed, radius, colorArray) {
+    constructor(x, y, speed, mass, colorArray) {
         this.x = x;
         this.y = y;
         this.vx = speed * (Math.random() - 0.5);
         this.vy = speed * (Math.random() - 0.5);
-        this.radius = radius;
         this.colorArray = colorArray;
-        this.mass = radius / 1000
+        this.mass = mass
     }
 
     move() {
-        this.x += (mousePosX - this.x) / 100
-        this.y += (mousePosY - this.y) / 100        
+        this.x += (mousePosX - this.x) / this.mass
+        this.y += (mousePosY - this.y) / this.mass     
+    }
+
+    eat(){
+        for (let i = 0; i < foodBalls.length; i++) {
+            let dx = this.x - foodBalls[i].x;
+            let dy = this.y - foodBalls[i].y;
+            let dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < (50 +(this.mass / Math.PI)) && foodBalls[i].mass > 0) {
+                ctx.strokeStyle = 'rgba(0,0,0,1)';
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(foodBalls[i].x, foodBalls[i].y);
+                ctx.stroke();
+                foodBalls[i].mass--
+                this.mass += (1 / dist)
+            }
+        }
     }
 
     draw() {
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.arc(this.x, this.y, Math.abs((this.mass / Math.PI)), 0, Math.PI * 2);
         ctx.fillStyle = 'rgba('+ (this.colorArray[0]) + ',' + (this.colorArray[1]) + ',' + (this.colorArray[2]) + ',1)';
         ctx.fill();
         ctx.closePath();
@@ -53,8 +69,11 @@ function start() {
         for (const ball of foodBalls) {
             ball.draw();
         }
-        player.draw()
+
         player.move()
+        player.eat()
+        player.draw()        
+        
         animation = requestAnimationFrame(animate);
     }
     animate();
@@ -67,7 +86,7 @@ function addFood(quantity){
         let color;
         color = [(Math.random() * 255), (Math.random() * 255), (Math.random() * 255),]
 
-        foodBalls.push(new Ball(x, y, 0, 5, color));
+        foodBalls.push(new Ball(x, y, 0, (Math.random() * 50), color));
     }
 }
 
