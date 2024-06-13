@@ -25,8 +25,8 @@ class Ball {
     constructor(x, y, speed, radius, colorArray, id) {
         this.x = x;
         this.y = y;
-        this.vx = speed * (Math.random() - 0.5);
-        this.vy = speed * (Math.random() - 0.5);
+        this.vx = speed * (Math.random() - 0.5) / 10;
+        this.vy = speed * (Math.random() - 0.5) / 10;
         this.radius = radius;
         this.colorArray = colorArray;
         this.id = id
@@ -98,17 +98,23 @@ function start() {
     }
 
     function flow(smaller, bigger){
+        const impact = 0.05
+        const minSpeed = 0.2
+        const flowSpeed = 0.2
         ctx.strokeStyle = bigger.color
         ctx.beginPath();
         ctx.moveTo(bigger.x, bigger.y);
         ctx.lineTo(smaller.x, smaller.y);
         ctx.stroke();
-        smaller.radius -= 0.2
-        bigger.radius += 0.1
+        smaller.radius -= flowSpeed
+        bigger.radius += (flowSpeed / 2)
+        smaller.vx < minSpeed ? smaller.vx -= impact : smaller.vx += impact
+        smaller.vy < minSpeed ? smaller.vy -= impact : smaller.vy += impact
+        bigger.vx < minSpeed ? bigger.vx += impact : bigger.vx -= impact
+        bigger.vy < minSpeed ? bigger.vy += impact : bigger.vy -= impact
         if (smaller.radius < 1){
             let index = balls.findIndex(obj => obj.id === smaller.id);
             balls.splice(index, 1)
-            console.log(balls)
         }
     }
 
