@@ -22,13 +22,13 @@ startButton.addEventListener('click', () => {
 resetButton.addEventListener('click', reset);
 
 class Ball {
-    constructor(x, y, speed, radius, colorArray, id) {
+    constructor(x, y, speed, radius, colArr, id) {
         this.x = x;
         this.y = y;
         this.vx = speed * (Math.random() - 0.5) / 10;
         this.vy = speed * (Math.random() - 0.5) / 10;
         this.radius = radius;
-        this.colorArray = colorArray;
+        this.colArr = colArr;
         this.id = id
     }
 
@@ -36,11 +36,13 @@ class Ball {
         this.x += this.vx;
         this.y += this.vy;
         
-        if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) {
+        if ((this.x - this.radius < 0 && this.vx < 0) 
+            || (this.x + this.radius > canvas.width && this.vx > 0)) {
             this.vx = -this.vx;
         }
 
-        if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) {
+        if ((this.y - this.radius < 0 && this.vy < 0) 
+            || (this.y + this.radius > canvas.height && this.vy > 0)) {
             this.vy = -this.vy;
         }
     }
@@ -48,7 +50,7 @@ class Ball {
     draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba('+ (this.colorArray[0]) + ',' + (this.colorArray[1]) + ',' + (this.colorArray[2]) + ',1)';
+        ctx.fillStyle = 'rgba('+ (this.colArr[0]) + ',' + (this.colArr[1]) + ',' + (this.colArr[2]) + ',1)';
         ctx.fill();
         ctx.closePath();
     }
@@ -81,14 +83,14 @@ function start() {
                 let dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < (distance + balls[i].radius + balls[j].radius) ) {
                     ctx.strokeStyle = 'rgba('+ 
-                        ((balls[i].colorArray[0] + balls[j].colorArray[0]) / 2) + ',' + 
-                        ((balls[i].colorArray[1] + balls[j].colorArray[1]) / 2) + ',' + 
-                        ((balls[i].colorArray[2] + balls[j].colorArray[2]) / 2) + ',' + lineThickness +')';
+                        ((balls[i].colArr[0] + balls[j].colArr[0]) / 2) + ',' + 
+                        ((balls[i].colArr[1] + balls[j].colArr[1]) / 2) + ',' + 
+                        ((balls[i].colArr[2] + balls[j].colArr[2]) / 2) + ',' + lineThickness +')';
                     ctx.beginPath();
                     ctx.moveTo(balls[i].x, balls[i].y);
                     ctx.lineTo(balls[j].x, balls[j].y);
                     ctx.stroke();
-                    if (balls[j].mass <= balls[i].mass)
+                    if (balls[j].radius <= balls[i].radius)
                         flow(balls[j], balls[i])
                     else
                         flow(balls[i], balls[j])
@@ -98,20 +100,24 @@ function start() {
     }
 
     function flow(smaller, bigger){
-        const impact = 0.05
-        const minSpeed = 0.2
-        const flowSpeed = 0.2
+        const impact = 0.2
+        const minSpeed = 1
+        const flowSpeed = 0.5
         ctx.strokeStyle = bigger.color
-        ctx.beginPath();
-        ctx.moveTo(bigger.x, bigger.y);
-        ctx.lineTo(smaller.x, smaller.y);
-        ctx.stroke();
+        ctx.beginPath()
+        ctx.moveTo(bigger.x, bigger.y)
+        ctx.lineTo(smaller.x, smaller.y)
+        ctx.stroke()
         smaller.radius -= flowSpeed
-        bigger.radius += (flowSpeed / 2)
-        smaller.vx < minSpeed ? smaller.vx -= impact : smaller.vx += impact
-        smaller.vy < minSpeed ? smaller.vy -= impact : smaller.vy += impact
-        bigger.vx < minSpeed ? bigger.vx += impact : bigger.vx -= impact
-        bigger.vy < minSpeed ? bigger.vy += impact : bigger.vy -= impact
+        bigger.radius += (flowSpeed / 4)
+
+        smaller.vx += impact
+        smaller.vy += impact
+        if (bigger.vx > minSpeed) 
+            bigger.vx -= impact
+        if (bigger.vy > minSpeed)
+            bigger.vy -= impact
+
         if (smaller.radius < 1){
             let index = balls.findIndex(obj => obj.id === smaller.id);
             balls.splice(index, 1)
